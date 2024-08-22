@@ -3,67 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XMLHttpRequest challenge</title>
-    <style>
-        textarea {
-            margin-top: 1em;
-            width: 500px;
-            height: 500px;
-        }
-    </style>
+    <title>XMLHttpRequest</title>
 </head>
 <body>
-    <div>
-        <button id="success">Click to start XHR(success)</button>
-        <button id="error">Click to start XHR(error)</button>
-        <button id="abort">Click to start XHR(abort)</button>
-    </div>
-    <div>
-        <textarea id="log" readonly></textarea>
-    </div>
+    <button id="btn">Click</button>
     <script>
-        const btnSuccess = document.getElementById('success');
-        const btnError = document.getElementById('error');
-        const btnAbort = document.getElementById('abort');
-        const log = document.getElementById('log');
-
-        function addListeners(xhr) {
-            xhr.addEventListener('loadstart', handleEvent);
-            xhr.addEventListener('load', handleEvent);
-            xhr.addEventListener('loadend', handleEvent);
-            xhr.addEventListener('progress', handleEvent);
-            xhr.addEventListener('error', handleEvent);
-            xhr.addEventListener('abort', handleEvent);
-        }
-
-        function handleEvent(e) {
-            log.textContent += `${e.type}: ${e.loaded} bytes transferred.\n`;
-        }
-
-        function runXHR(url) {
-            log.textContent = '';
-
+        let btn = document.getElementById('btn');
+        btn.addEventListener('click', () => {
+            // 1. Make AJAX object
             let xhr = new XMLHttpRequest();
 
-            addListeners(xhr);
-            xhr.open('GET', url);
+            // 2. Configure AJAX object
+            let url = './message.txt';
+            let method = 'GET';
+            xhr.open(method, url);
+
+            // 3. Listen for events
+            xhr.onprogress = (e) => {
+                console.log(`Downloaded ${e.loaded} of ${e.total}`);
+            }
+
+            xhr.onerror = (e) => {
+                console.log('Network error');
+            }
+
+            xhr.onload = () => {
+                if (xhr.status === 200) document.write(`Success! Your text is ${xhr.responseText}`);
+                else document.write('File does not exist!');
+            }
+
+            // 4. Send to server
             xhr.send();
-
-            return xhr;
-        }
-
-        // Trigger AJAX request
-        btnSuccess.addEventListener('click', () => {
-            runXHR('http://openlibrary.org/search.json?q=the+lord+of+the+rings');
-        });
-
-        btnError.addEventListener('click', () => {
-            runXHR('http://fakeurl:8081');
-        });
-
-        btnAbort.addEventListener('click', () => {
-            runXHR('http://openlibrary.org/search.json?q=the+lord+of+the+rings').abort();
         })
     </script>
+    
 </body>
 </html>

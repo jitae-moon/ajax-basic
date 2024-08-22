@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX Post Request</title>
+</head>
+<body>
+    <form id="mainForm">
+        <label>Username:</label>
+        <div>
+            <input type="text" name="username" />
+            <br>
+            <label>Comment:</label>
+            <div>
+                <textarea name="comment"></textarea>
+            </div>
+        </div>
+        <button onclick="postComment(event)">Submit</button>
+    </form>
+    <div id="result">
+        <p>Content of this area will be replaced by a server response.</p>
+    </div>
+    <script>
+        function postComment(e) {
+            e.preventDefault();
+            // Set up AJAX object
+            let xhr = new XMLHttpRequest();
+
+            // Configure AJAX object
+            let method = 'POST';
+            let url = './message.php';
+            xhr.open(method, url);
+
+            // Listen for events
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) document.getElementById('result').innerHTML = this.responseText;
+            };
+
+            // Send AJAX request
+            let mainForm = document.getElementById('mainForm');
+            let formData = new FormData(mainForm);
+            xhr.send(formData);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File upload</title>
+</head>
+<body>
+    <input type="file" id="fileUploadBtn" />
+    <script>
+        let fileUploadBtn = document.getElementById('fileUploadBtn');
+        fileUploadBtn.addEventListener('change', upload);
+
+        function upload() {
+            let fileSelected = this.files[0]; // this === <input>
+
+            let xhr = new XMLHttpRequest();
+
+            xhr.upload.onprogress = (e) => {
+                console.log(`Uploaded ${e.loaded} of ${e.total}`);
+            }
+
+            xhr.onloadend = (e) => {
+                if (xhr.status === 200) console.log('Successful upload');
+                else console.log('error: ' + xhr.status);
+            }
+
+            let method = 'POST';
+            let url = 'fakeUrl';
+            xhr.open(method, url);
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
