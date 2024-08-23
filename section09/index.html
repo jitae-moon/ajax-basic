@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API</title>
+</head>
+<body>
+    <div>
+        <h1 id="random-word">Here's your random word!</h1>
+    </div>
+    <button onclick="getRandomWord()">Get random word!</button>
+
+    <script>
+    function getRandomWord() {
+        let url = 'https://random-word-api.herokuapp.com/word';
+
+        let requestHeaders = {
+            "Accept": "application/json"
+        };
+
+        fetch(url, {
+            headers: requestHeaders
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                document.getElementById('random-word').innerHTML = data;
+            });
+    }
+    </script>
+</body>
+</html>
