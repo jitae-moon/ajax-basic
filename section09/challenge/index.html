@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jokes</title>
+</head>
+<body>
+    <h1>XHR uses callback</h1>
+    <h1>fetch() uses Promise</h1>
+    <h1>fetch() with async/await is better</h1>
+
+    <button onclick="showJokeXHR()">Show Joke(XHR)</button>
+    <button onclick="showJokeFetch()">Show Joke(Fetch)</button>
+    <button id="btnFetch">Show Joke(Fetch & async/await)</button>
+
+    <br><br>
+    <div id="joke"></div>
+    
+    <script>
+        const url = 'https://icanhazdadjoke.com';
+
+        function showJokeXHR() {
+            let xhr = new XMLHttpRequest();
+
+            xhr.open('GET', url);
+            xhr.setRequestHeader('Accept', 'application/json');
+            xhr.onloadend = (e) => {
+                document.getElementById('joke').innerHTML = JSON.parse(xhr.responseText)['joke'];
+            }
+            xhr.send();
+        }
+
+        function showJokeFetch() {
+            const requestHeader = {
+                'Accept': 'application/json'
+            };
+            fetch(url, {
+                headers: requestHeader
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                document.getElementById('joke').innerHTML = data['joke'];
+            });
+
+        }
+    </script>
+    <script src="./app.js"></script>
+</body>
+</html>
